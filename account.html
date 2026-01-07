@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Личный кабинет - Olimp</title>
+    
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <header class="bg-success text-white sticky-top shadow">
+        <nav class="navbar navbar-expand-lg navbar-dark bg-success">
+            <div class="container">
+                <a class="navbar-brand d-flex align-items-center" href="index.html">
+                    <i class="bi bi-trophy fs-3 me-2"></i>
+                    <span class="fw-bold">Olimp</span>
+                </a>
+                
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                
+                <div class="collapse navbar-collapse" id="navbarNav">
+                    <ul class="navbar-nav ms-auto">
+                        <li class="nav-item">
+                            <a class="nav-link" href="index.html">
+                                <i class="bi bi-house me-1"></i>Главная
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link active" href="account.html">
+                                <i class="bi bi-person-circle me-1"></i>Личный кабинет
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <div id="notification-area" class="container mt-3"></div>
+
+    <main class="container py-5">
+        <h1 class="mb-4">Личный кабинет</h1>
+        
+        <div class="card shadow mb-5 border-success">
+            <div class="card-header bg-success text-white">
+                <h5 class="mb-0">Мои заявки</h5>
+            </div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table table-hover">
+                        <thead>
+                            <tr>
+                                <th>№</th>
+                                <th>Название курса/Услуги</th>
+                                <th>Дата занятия</th>
+                                <th>Общая стоимость</th>
+                                <th>Статус</th>
+                                <th>Действия</th>
+                            </tr>
+                        </thead>
+                        <tbody id="orders-table-body">  
+                        </tbody>
+                    </table>
+                </div>
+                
+                <nav aria-label="Навигация по страницам заявок" class="mt-4">
+                    <ul id="orders-pagination" class="pagination justify-content-center">
+                    </ul>
+                </nav>
+            </div>
+        </div>
+    </main>
+
+    <footer class="bg-success text-white py-4">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-6">
+                    <h6>Контакты</h6>
+                    <p class="mb-1">
+                        <i class="bi bi-geo-alt me-2"></i>Москва, ул. Образовательная, 15
+                    </p>
+                    <p class="mb-1">
+                        <i class="bi bi-telephone me-2"></i>+7 (495) 987-65-43
+                    </p>
+                    <p class="mb-0">
+                        <i class="bi bi-envelope me-2"></i>support@olimp-school.ru
+                    </p>
+                </div>
+                <div class="col-md-6 text-md-end">
+                    <h6>Социальные сети</h6>
+                    <ul class="list-unstyled">
+                        <li class="mb-1">
+                            <a href="#" class="text-white text-decoration-none">
+                                <i class="bi bi-facebook me-1"></i>Facebook
+                            </a>
+                        </li>
+                        <li class="mb-1">
+                            <a href="#" class="text-white text-decoration-none">
+                                <i class="bi bi-instagram me-1"></i>Instagram
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#" class="text-white text-decoration-none">
+                                <i class="bi bi-telegram me-1"></i>Telegram
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            <hr class="my-3">
+            <div class="text-center">
+                <p class="mb-0">&copy; 2024 Языковая школа Olimp. Все права защищены.</p>
+            </div>
+        </div>
+    </footer>
+
+    <div class="modal fade" id="orderDetailsModal" tabindex="-1">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Подробная информация о заявке</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <div id="orderDetailsContent">
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-success" data-bs-dismiss="modal">Закрыть</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="orderEditModal" tabindex="-1">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Редактирование заявки</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="editOrderForm">
+                        <div class="mb-3">
+                            <label class="form-label">Информация о заявке:</label>
+                            <div class="alert alert-info py-2" id="editCourseInfo">
+                            </div>
+                        </div>
+                        
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label for="editDateStart" class="form-label">Дата начала *</label>
+                                    <input type="date" class="form-control" id="editDateStart" required>
+                                </div>
+                            </div>
+                            
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label for="editTimeStart" class="form-label">Время начала *</label>
+                                    <input type="time" class="form-control" id="editTimeStart" required>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label for="editPersons" class="form-label">Количество студентов *</label>
+                            <input type="number" class="form-control" id="editPersons" 
+                                   min="1" max="20" required>
+                        </div>
+                        
+                        <hr>
+                        
+                        <h6>Дополнительные опции:</h6>
+                        
+                        <div class="alert alert-warning mt-3">
+                            <small>
+                                <i class="bi bi-exclamation-triangle me-1"></i>
+                                <strong>Внимание:</strong> Скидки за раннюю регистрацию и групповую запись, 
+                                а также надбавки за интенсивный курс рассчитываются автоматически и не могут 
+                                быть изменены вручную.
+                            </small>
+                        </div>
+                        
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="card mb-2 bg-light">
+                                    <div class="card-body py-2">
+                                        <div class="form-check mb-0">
+                                            <input class="form-check-input" type="checkbox" 
+                                                   id="editEarlyRegistration" disabled>
+                                            <label class="form-check-label" for="editEarlyRegistration">
+                                                Ранняя регистрация (скидка 10%)
+                                            </label>
+                                        </div>
+                                        <small class="text-muted d-block mt-1">
+                                            Автоматически применяется при регистрации за месяц вперед
+                                        </small>
+                                    </div>
+                                </div>
+                                
+                                <div class="card mb-2 bg-light">
+                                    <div class="card-body py-2">
+                                        <div class="form-check mb-0">
+                                            <input class="form-check-input" type="checkbox" 
+                                                   id="editGroupEnrollment" disabled>
+                                            <label class="form-check-label" for="editGroupEnrollment">
+                                                Групповая запись (скидка 15%)
+                                            </label>
+                                        </div>
+                                        <small class="text-muted d-block mt-1">
+                                            Автоматически применяется при записи от 5 человек
+                                        </small>
+                                    </div>
+                                </div>
+                                
+                                <div class="card mb-2 bg-light">
+                                    <div class="card-body py-2">
+                                        <div class="form-check mb-0">
+                                            <input class="form-check-input" type="checkbox" 
+                                                   id="editIntensiveCourse" disabled>
+                                            <label class="form-check-label" for="editIntensiveCourse">
+                                                Интенсивный курс (надбавка 20%)
+                                            </label>
+                                        </div>
+                                        <small class="text-muted d-block mt-1">
+                                            Автоматически применяется для интенсивных курсов
+                                        </small>
+                                    </div>
+                                </div>
+                                
+                                <div class="form-check mb-2">
+                                    <input class="form-check-input" type="checkbox" 
+                                           id="editSupplementary">
+                                    <label class="form-check-label" for="editSupplementary">
+                                        Доп. материалы (+2000 ₽/чел)
+                                    </label>
+                                </div>
+                            </div>
+                            
+                            <div class="col-md-6">
+                                <div class="form-check mb-2">
+                                    <input class="form-check-input" type="checkbox" 
+                                           id="editPersonalized">
+                                    <label class="form-check-label" for="editPersonalized">
+                                        Индивид. занятия (+1500 ₽/нед)
+                                    </label>
+                                </div>
+                                
+                                <div class="form-check mb-2">
+                                    <input class="form-check-input" type="checkbox" 
+                                           id="editExcursions">
+                                    <label class="form-check-label" for="editExcursions">
+                                        Культурные экскурсии (надбавка 25%)
+                                    </label>
+                                </div>
+                                
+                                <div class="form-check mb-2">
+                                    <input class="form-check-input" type="checkbox" 
+                                           id="editAssessment">
+                                    <label class="form-check-label" for="editAssessment">
+                                        Оценка уровня (+300 ₽)
+                                    </label>
+                                </div>
+                                
+                                <div class="form-check mb-2">
+                                    <input class="form-check-input" type="checkbox" 
+                                           id="editInteractive">
+                                    <label class="form-check-label" for="editInteractive">
+                                        Интерактивная платформа (надбавка 50%)
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Отмена</button>
+                    <button type="button" class="btn btn-success" id="saveOrderChangesBtn">
+                        Сохранить изменения
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="deleteConfirmModal" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Подтверждение удаления</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <p>Вы уверены, что хотите удалить эту заявку?</p>
+                    <p class="text-danger"><small>Это действие нельзя отменить.</small></p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Нет, оставить</button>
+                    <button type="button" class="btn btn-danger" id="confirmDeleteOrderBtn">
+                        Да, удалить
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+   
+</body>
+</html>
